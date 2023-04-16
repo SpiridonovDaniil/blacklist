@@ -1,0 +1,131 @@
+basePath: /
+definitions:
+  domain.Id:
+    properties:
+      id:
+        example: 1
+        type: integer
+    type: object
+  domain.Person:
+    properties:
+      id:
+        example: 1
+        type: integer
+      name:
+        example: my_name
+        type: string
+      phone:
+        example: my_phone
+        type: string
+      reason:
+        example: my_reason
+        type: string
+      time:
+        example: 16.04.2023
+        type: string
+      uploader:
+        example: admin
+        type: string
+    type: object
+  domain.Search:
+    properties:
+      name:
+        example: my_name
+        type: string
+      phone:
+        example: my_phone
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: daniil13.spiridonov@yandex.ru
+    name: Daniil56
+  description: Swagger API for Golang Project Blacklist
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Blacklist
+  version: "1.0"
+paths:
+  /:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: Delete person
+        in: body
+        name: id
+        required: true
+        schema:
+          $ref: '#/definitions/domain.Id'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: delete user in blacklist
+      tags:
+      - accounts
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Register person
+        in: body
+        name: person
+        required: true
+        schema:
+          $ref: '#/definitions/domain.Person'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+        "400":
+          description: Bad Request
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: create user in blacklist
+      tags:
+      - accounts
+  /accounts/{id}:
+    get:
+      consumes:
+      - application/json
+      description: get domain.Person by name or phone
+      parameters:
+      - description: Show blacklist person
+        in: body
+        name: search
+        required: true
+        schema:
+          $ref: '#/definitions/domain.Search'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.Person'
+            type: array
+        "400":
+          description: Bad Request
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Get user in blacklist
+      tags:
+      - accounts
+swagger: "2.0"

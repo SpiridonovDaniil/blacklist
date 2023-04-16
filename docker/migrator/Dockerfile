@@ -12,6 +12,6 @@ COPY internal/config ./internal/config
 COPY migration ./migration
 COPY .env .env
 
-RUN CGO_ENABLED=0 go build -o /opt/migrator ./cmd/migrator
+RUN CGO_ENABLED=0 go build -o /opt/migrator ./migrator/migrator
 
 CMD [ "/opt/migrator", "-up=true"]

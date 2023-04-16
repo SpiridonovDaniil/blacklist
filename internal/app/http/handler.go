@@ -4,11 +4,23 @@ import (
 	"fmt"
 	"net/http"
 
+	_ "blacklist/docs"
 	"blacklist/internal/domain"
 
 	"github.com/gofiber/fiber/v2"
 )
 
+// Create godoc
+// @Summary      create user in blacklist
+// @Tags         accounts
+// @Accept       json
+// @Produce      json
+// @Param        person body domain.Person true "Register person"
+// @Success      201
+// @Failure      400  {object}  error
+// @Failure      400  {object}  error
+// @Failure      500  {object}  error
+// @Router       / [post]
 func createHandler(service service) func(ctx *fiber.Ctx) error {
 	return func(ctx *fiber.Ctx) error {
 		var req domain.Person
@@ -46,6 +58,16 @@ func checkRequest(req domain.Person) bool {
 	return false
 }
 
+// Delete godoc
+// @Summary      delete user in blacklist
+// @Tags         accounts
+// @Accept       json
+// @Produce      json
+// @Param        id body domain.Id true "Delete person"
+// @Success      200
+// @Failure      400  {object}  error
+// @Failure      500  {object}  error
+// @Router       / [delete]
 func deleteHandler(service service) func(ctx *fiber.Ctx) error {
 	return func(ctx *fiber.Ctx) error {
 		var req domain.Id
@@ -65,6 +87,17 @@ func deleteHandler(service service) func(ctx *fiber.Ctx) error {
 	}
 }
 
+// Get godoc
+// @Summary      Get user in blacklist
+// @Description  get domain.Person by name or phone
+// @Tags         accounts
+// @Accept       json
+// @Produce      json
+// @Param        search body domain.Search true "Show blacklist person"
+// @Success      200  {object}  []domain.Person
+// @Failure      400  {object}  error
+// @Failure      500  {object}  error
+// @Router       /accounts/{id} [get]
 func getHandler(service service) func(ctx *fiber.Ctx) error {
 	return func(ctx *fiber.Ctx) error {
 		var req domain.Search

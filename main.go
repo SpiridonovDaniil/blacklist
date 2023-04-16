@@ -1,12 +1,23 @@
 package main
 
 import (
+	_ "blacklist/docs"
 	router "blacklist/internal/app/http"
 	"blacklist/internal/app/service"
 	"blacklist/internal/config"
 	"blacklist/internal/repository/postgres"
 )
 
+// @title Blacklist
+// @version 1.0
+// @description Swagger API for Golang Project Blacklist
+// @termsOfService http://swagger.io/terms/
+// @contact.name Daniil56
+// @contact.email daniil13.spiridonov@yandex.ru
+// @license.name Apache 2.0
+// @license.url http://www.apache.org/licenses/LICENSE-2.0.html
+// @host localhost:8080
+// @BasePath /
 func main() {
 	cfg := config.Read()
 
