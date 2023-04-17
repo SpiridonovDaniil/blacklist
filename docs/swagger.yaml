@@ -1,5 +1,20 @@
 basePath: /
 definitions:
+  domain.AddPerson:
+    properties:
+      name:
+        example: my_name
+        type: string
+      phone:
+        example: my_phone
+        type: string
+      reason:
+        example: my_reason
+        type: string
+      uploader:
+        example: admin
+        type: string
+    type: object
   domain.Id:
     properties:
       id:
@@ -27,15 +42,6 @@ definitions:
         example: admin
         type: string
     type: object
-  domain.Search:
-    properties:
-      name:
-        example: my_name
-        type: string
-      phone:
-        example: my_phone
-        type: string
-    type: object
 host: localhost:8080
 info:
   contact:
@@ -53,8 +59,9 @@ paths:
     delete:
       consumes:
       - application/json
+      description: remove a user from the blacklist
       parameters:
-      - description: Delete person
+      - description: User ID
         in: body
         name: id
         required: true
@@ -71,45 +78,20 @@ paths:
         "500":
           description: Internal Server Error
           schema: {}
-      summary: delete user in blacklist
-      tags:
-      - accounts
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: Register person
-        in: body
-        name: person
-        required: true
-        schema:
-          $ref: '#/definitions/domain.Person'
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: Created
-        "400":
-          description: Bad Request
-          schema: {}
-        "500":
-          description: Internal Server Error
-          schema: {}
-      summary: create user in blacklist
-      tags:
-      - accounts
-  /accounts/{id}:
+      summary: remove from blacklist
     get:
       consumes:
       - application/json
-      description: get domain.Person by name or phone
+      description: search and get users from the blacklist by phone number or name
       parameters:
-      - description: Show blacklist person
-        in: body
-        name: search
-        required: true
-        schema:
-          $ref: '#/definitions/domain.Search'
+      - description: name
+        in: query
+        name: name
+        type: string
+      - description: phone
+        in: query
+        name: phone
+        type: string
       produces:
       - application/json
       responses:
@@ -125,7 +107,28 @@ paths:
         "500":
           description: Internal Server Error
           schema: {}
-      summary: Get user in blacklist
-      tags:
-      - accounts
+      summary: blacklisted search
+    post:
+      consumes:
+      - application/json
+      description: the method adds the user to the blacklist
+      parameters:
+      - description: Name, phone, reason and uploader
+        in: body
+        name: person
+        required: true
+        schema:
+          $ref: '#/definitions/domain.AddPerson'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+        "400":
+          description: Bad Request
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: add to blacklist
 swagger: "2.0"

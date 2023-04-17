@@ -12,7 +12,6 @@ require (
 	github.com/lib/pq v1.10.7
 	github.com/pressly/goose/v3 v3.10.0
 	github.com/stretchr/testify v1.8.2
-	github.com/swaggo/fiber-swagger v1.3.0
 	github.com/swaggo/swag v1.8.12
 )
 

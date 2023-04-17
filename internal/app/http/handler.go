@@ -11,11 +11,11 @@ import (
 )
 
 // Create godoc
-// @Summary      create user in blacklist
-// @Tags         accounts
+// @Summary      add to blacklist
+// @Description  the method adds the user to the blacklist
 // @Accept       json
 // @Produce      json
-// @Param        person body domain.Person true "Register person"
+// @Param        person body domain.AddPerson true "Name, phone, reason and uploader"
 // @Success      201
 // @Failure      400  {object}  error
 // @Failure      400  {object}  error
@@ -59,11 +59,11 @@ func checkRequest(req domain.Person) bool {
 }
 
 // Delete godoc
-// @Summary      delete user in blacklist
-// @Tags         accounts
+// @Summary      remove from blacklist
+// @Description  remove a user from the blacklist
 // @Accept       json
 // @Produce      json
-// @Param        id body domain.Id true "Delete person"
+// @Param        id body domain.Id true "User ID"
 // @Success      200
 // @Failure      400  {object}  error
 // @Failure      500  {object}  error
@@ -88,24 +88,30 @@ func deleteHandler(service service) func(ctx *fiber.Ctx) error {
 }
 
 // Get godoc
-// @Summary      Get user in blacklist
-// @Description  get domain.Person by name or phone
-// @Tags         accounts
+// @Summary      blacklisted search
+// @Description  search and get users from the blacklist by phone number or name
 // @Accept       json
 // @Produce      json
-// @Param        search body domain.Search true "Show blacklist person"
+// @Param name query string false "name"
+// @Param phone query string false "phone"
 // @Success      200  {object}  []domain.Person
 // @Failure      400  {object}  error
 // @Failure      500  {object}  error
-// @Router       /accounts/{id} [get]
+// @Router       / [get]
 func getHandler(service service) func(ctx *fiber.Ctx) error {
 	return func(ctx *fiber.Ctx) error {
-		var req domain.Search
-		err := ctx.BodyParser(&req)
-		if err != nil {
+		name := ctx.Query("name")
+		phone := ctx.Query("phone")
+
+		if name == "" && phone == "" {
 			ctx.Status(http.StatusBadRequest)
-			return fmt.Errorf("[getHandler] failed to parse request, error: %w", err)
+			return fmt.Errorf("[getHandler] search parameters are not specified")
 		}
+		req := domain.Search{
+			Name:  name,
+			Phone: phone,
+		}
+
 		resp, err := service.Get(ctx.Context(), &req)
 		if err != nil {
 			ctx.Status(http.StatusInternalServerError)

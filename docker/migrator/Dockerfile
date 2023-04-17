@@ -7,11 +7,11 @@ COPY go.sum .
 
 RUN go mod download
 
-COPY cmd/migrator ./cmd/migrator
+COPY /migrator ./migrator
 COPY internal/config ./internal/config
 COPY migration ./migration
 COPY .env .env
 
-RUN CGO_ENABLED=0 go build -o /opt/migrator ./migrator/migrator
+RUN CGO_ENABLED=0 go build -o /opt/migrator ./migrator
 
 CMD [ "/opt/migrator", "-up=true"]

@@ -17,3 +17,10 @@ type Search struct {
 	Name  string `json:"name" example:"my_name"`
 	Phone string `json:"phone" example:"my_phone"`
 }
+
+type AddPerson struct {
+	Phone    string `json:"phone" example:"my_phone"`
+	Name     string `json:"name" example:"my_name"`
+	Reason   string `json:"reason" example:"my_reason"`
+	Uploader string `json:"uploader" example:"admin"`
+}

@@ -25,25 +25,66 @@ const docTemplate = `{
     "basePath": "{{.BasePath}}",
     "paths": {
         "/": {
-            "post": {
+            "get": {
+                "description": "search and get users from the blacklist by phone number or name",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
                     "application/json"
                 ],
-                "tags": [
-                    "accounts"
-                ],
-                "summary": "create user in blacklist",
+                "summary": "blacklisted search",
                 "parameters": [
                     {
-                        "description": "Register person",
+                        "type": "string",
+                        "description": "name",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "phone",
+                        "name": "phone",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/domain.Person"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {}
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {}
+                    }
+                }
+            },
+            "post": {
+                "description": "the method adds the user to the blacklist",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "add to blacklist",
+                "parameters": [
+                    {
+                        "description": "Name, phone, reason and uploader",
                         "name": "person",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/domain.Person"
+                            "$ref": "#/definitions/domain.AddPerson"
                         }
                     }
                 ],
@@ -62,19 +103,17 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "description": "remove a user from the blacklist",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
                     "application/json"
                 ],
-                "tags": [
-                    "accounts"
-                ],
-                "summary": "delete user in blacklist",
+                "summary": "remove from blacklist",
                 "parameters": [
                     {
-                        "description": "Delete person",
+                        "description": "User ID",
                         "name": "id",
                         "in": "body",
                         "required": true,
@@ -97,54 +136,30 @@ const docTemplate = `{
                     }
                 }
             }
-        },
-        "/accounts/{id}": {
-            "get": {
-                "description": "get domain.Person by name or phone",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "accounts"
-                ],
-                "summary": "Get user in blacklist",
-                "parameters": [
-                    {
-                        "description": "Show blacklist person",
-                        "name": "search",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/domain.Search"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/domain.Person"
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {}
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {}
-                    }
-                }
-            }
         }
     },
     "definitions": {
+        "domain.AddPerson": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "example": "my_name"
+                },
+                "phone": {
+                    "type": "string",
+                    "example": "my_phone"
+                },
+                "reason": {
+                    "type": "string",
+                    "example": "my_reason"
+                },
+                "uploader": {
+                    "type": "string",
+                    "example": "admin"
+                }
+            }
+        },
         "domain.Id": {
             "type": "object",
             "properties": {
@@ -180,19 +195,6 @@ const docTemplate = `{
                 "uploader": {
                     "type": "string",
                     "example": "admin"
-                }
-            }
-        },
-        "domain.Search": {
-            "type": "object",
-            "properties": {
-                "name": {
-                    "type": "string",
-                    "example": "my_name"
-                },
-                "phone": {
-                    "type": "string",
-                    "example": "my_phone"
                 }
             }
         }
