@@ -5,10 +5,9 @@
 package mock_http
 
 import (
+	domain "blacklist/internal/domain"
 	context "context"
 	reflect "reflect"
-
-	domain "blacklist/internal/domain"
 
 	gomock "github.com/golang/mock/gomock"
 )

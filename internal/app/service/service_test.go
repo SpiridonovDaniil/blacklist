@@ -9,11 +9,14 @@ import (
 
 	server "blacklist/internal/app/http"
 	mock_http "blacklist/internal/app/http/mocks"
+	"blacklist/internal/config"
 	"blacklist/internal/domain"
 
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
 )
+
+var cfg = &config.Config{Auth: config.Auth{Auth: "admin"}}
 
 func TestService_Create(t *testing.T) {
 	type mockBehavior func(s *mock_http.Mockservice, expectedError error)
@@ -71,9 +74,10 @@ func TestService_Create(t *testing.T) {
 				testCase.mockBehavior(service, testCase.expectedError)
 			}
 
-			f := server.NewServer(service)
+			f := server.NewServer(service, cfg)
 			req, err := http.NewRequest("POST", "/", strings.NewReader(testCase.inputBody))
 			req.Header.Add("content-Type", "application/json")
+			req.Header.Add("Authorization", "admin")
 			assert.NoError(t, err)
 
 			resp, err := f.Test(req)
@@ -136,9 +140,10 @@ func TestService_Delete(t *testing.T) {
 				testCase.mockBehavior(service, testCase.expectedError)
 			}
 
-			f := server.NewServer(service)
+			f := server.NewServer(service, cfg)
 			req, err := http.NewRequest("DELETE", "/", strings.NewReader(testCase.inputBody))
 			req.Header.Add("content-Type", "application/json")
+			req.Header.Add("Authorization", "admin")
 			assert.NoError(t, err)
 
 			resp, err := f.Test(req)
@@ -242,7 +247,7 @@ func TestService_Get(t *testing.T) {
 				testCase.mockBehavior(service, nil, testCase.expectedError)
 			}
 
-			f := server.NewServer(service)
+			f := server.NewServer(service, cfg)
 			var url string
 			if testCase.name == "create bad request" {
 				url = "/"
@@ -251,6 +256,7 @@ func TestService_Get(t *testing.T) {
 			}
 			req, err := http.NewRequest("GET", url, strings.NewReader(""))
 			req.Header.Add("content-Type", "application/json")
+			req.Header.Add("Authorization", "admin")
 			assert.NoError(t, err)
 
 			resp, err := f.Test(req)

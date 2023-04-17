@@ -1,9 +1,11 @@
 package http
 
 import (
-	_ "blacklist/docs"
-	"blacklist/internal/domain"
 	"context"
+
+	_ "blacklist/docs"
+	"blacklist/internal/config"
+	"blacklist/internal/domain"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/swagger"
@@ -17,14 +19,14 @@ type service interface {
 	Get(ctx context.Context, req *domain.Search) ([]*domain.Person, error)
 }
 
-func NewServer(service service) *fiber.App {
+func NewServer(service service, cfg *config.Config) *fiber.App {
 	f := fiber.New()
 
 	f.Use(HandleErrors)
 
 	f.Get("/swagger/*", swagger.HandlerDefault)
 
-	f.Use(auth())
+	f.Use(auth(cfg))
 	f.Post("/", createHandler(service))
 	f.Delete("/", deleteHandler(service))
 	f.Get("/", getHandler(service))

@@ -26,7 +26,7 @@ func main() {
 
 	db := postgres.New(cfg.Postgres)
 	service := service.New(db)
-	r := router.NewServer(service)
+	r := router.NewServer(service, cfg)
 	err := r.Listen(":" + cfg.Service.Port)
 	if err != nil {
 		panic(err)

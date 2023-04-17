@@ -1,20 +1,21 @@
 package http
 
 import (
-	"blacklist/internal/config"
 	"fmt"
-	"github.com/gofiber/fiber/v2"
 	"net/http"
+
+	"blacklist/internal/config"
+
+	"github.com/gofiber/fiber/v2"
 )
 
-func auth() fiber.Handler {
+func auth(cfg *config.Config) fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
 		err := ctx.Next()
 		if err != nil {
 			return err
 		}
 		authHeader := ctx.GetReqHeaders()
-		cfg := config.Read()
 		if len(authHeader["Authorization"]) == 0 {
 			ctx.Status(http.StatusUnauthorized)
 			return fmt.Errorf("authorization is required Header")
