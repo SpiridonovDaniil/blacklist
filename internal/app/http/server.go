@@ -1,10 +1,9 @@
 package http
 
 import (
-	"context"
-
 	_ "blacklist/docs"
 	"blacklist/internal/domain"
+	"context"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/swagger"
@@ -25,6 +24,7 @@ func NewServer(service service) *fiber.App {
 
 	f.Get("/swagger/*", swagger.HandlerDefault)
 
+	f.Use(auth())
 	f.Post("/", createHandler(service))
 	f.Delete("/", deleteHandler(service))
 	f.Get("/", getHandler(service))

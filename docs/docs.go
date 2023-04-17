@@ -26,6 +26,11 @@ const docTemplate = `{
     "paths": {
         "/": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "search and get users from the blacklist by phone number or name",
                 "consumes": [
                     "application/json"
@@ -69,6 +74,11 @@ const docTemplate = `{
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "the method adds the user to the blacklist",
                 "consumes": [
                     "application/json"
@@ -103,6 +113,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "remove a user from the blacklist",
                 "consumes": [
                     "application/json"
@@ -197,6 +212,13 @@ const docTemplate = `{
                     "example": "admin"
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "ApiKeyAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }`

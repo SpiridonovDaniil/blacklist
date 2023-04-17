@@ -11,6 +11,7 @@ import (
 )
 
 // Create godoc
+// @Security ApiKeyAuth
 // @Summary      add to blacklist
 // @Description  the method adds the user to the blacklist
 // @Accept       json
@@ -59,6 +60,7 @@ func checkRequest(req domain.Person) bool {
 }
 
 // Delete godoc
+// @Security ApiKeyAuth
 // @Summary      remove from blacklist
 // @Description  remove a user from the blacklist
 // @Accept       json
@@ -89,6 +91,7 @@ func deleteHandler(service service) func(ctx *fiber.Ctx) error {
 
 // Get godoc
 // @Summary      blacklisted search
+// @Security ApiKeyAuth
 // @Description  search and get users from the blacklist by phone number or name
 // @Accept       json
 // @Produce      json

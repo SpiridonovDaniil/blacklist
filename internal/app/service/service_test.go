@@ -156,7 +156,6 @@ func TestService_Get(t *testing.T) {
 	testTable := []struct {
 		name                   string
 		serviceAnswer          []*domain.Person
-		inputBody              string
 		mockBehavior           mockBehavior
 		expectedTestStatusCode int
 		expectedError          error
@@ -182,7 +181,6 @@ func TestService_Get(t *testing.T) {
 					Uploader: "admin",
 				},
 			},
-			inputBody: `{"name" : "my_name"}`,
 			mockBehavior: func(s *mock_http.Mockservice, serviceAnswer []*domain.Person, expectedError error) {
 				s.EXPECT().Get(gomock.Any(), gomock.Any()).Return(serviceAnswer, expectedError)
 			},
@@ -209,7 +207,6 @@ func TestService_Get(t *testing.T) {
 					Uploader: "admin",
 				},
 			},
-			inputBody: `{"phone" : "my_phone"}`,
 			mockBehavior: func(s *mock_http.Mockservice, serviceAnswer []*domain.Person, expectedError error) {
 				s.EXPECT().Get(gomock.Any(), gomock.Any()).Return(serviceAnswer, expectedError)
 			},
@@ -217,14 +214,12 @@ func TestService_Get(t *testing.T) {
 			expectedResponse:       `[{"id":1,"phone":"my_phone","name":"my_name1","reason":"my_reason","time":"15-04-2023","uploader":"admin"},{"id":2,"phone":"my_phone","name":"my_name2","reason":"another_reason","time":"16-04-2023","uploader":"admin"}]`,
 		},
 		{
-			name:                   "create bad request, syntax error",
-			inputBody:              `{"name : "name", "phone" : "my_phone"}`,
+			name:                   "create bad request",
 			expectedTestStatusCode: 400,
-			expectedResponse:       "[getHandler] failed to parse request, error: invalid character 'n' after object key",
+			expectedResponse:       "[getHandler] search parameters are not specified",
 		},
 		{
-			name:      "create internal server error",
-			inputBody: `{"name" : "my_name", "phone" : "my_phone"}`,
+			name: "create internal server error",
 			mockBehavior: func(s *mock_http.Mockservice, serviceAnswer []*domain.Person, expectedError error) {
 				s.EXPECT().Get(gomock.Any(), gomock.AssignableToTypeOf(&domain.Search{})).Return(nil, expectedError)
 			},
@@ -248,7 +243,13 @@ func TestService_Get(t *testing.T) {
 			}
 
 			f := server.NewServer(service)
-			req, err := http.NewRequest("GET", "/", strings.NewReader(testCase.inputBody))
+			var url string
+			if testCase.name == "create bad request" {
+				url = "/"
+			} else {
+				url = "/?name=my_name?phone=my_phone"
+			}
+			req, err := http.NewRequest("GET", url, strings.NewReader(""))
 			req.Header.Add("content-Type", "application/json")
 			assert.NoError(t, err)
 

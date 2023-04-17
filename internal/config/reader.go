@@ -12,6 +12,7 @@ const envLocal = ".env.local"
 type Config struct {
 	Postgres Postgres
 	Service  Service
+	Auth     Auth
 }
 
 type Postgres struct {
@@ -24,6 +25,10 @@ type Postgres struct {
 
 type Service struct {
 	Port string `envconfig:"SERVICE_PORT"`
+}
+
+type Auth struct {
+	Auth string `envconfig:"AUTH"`
 }
 
 func Read() *Config {

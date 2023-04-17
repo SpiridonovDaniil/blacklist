@@ -78,6 +78,8 @@ paths:
         "500":
           description: Internal Server Error
           schema: {}
+      security:
+      - ApiKeyAuth: []
       summary: remove from blacklist
     get:
       consumes:
@@ -107,6 +109,8 @@ paths:
         "500":
           description: Internal Server Error
           schema: {}
+      security:
+      - ApiKeyAuth: []
       summary: blacklisted search
     post:
       consumes:
@@ -130,5 +134,12 @@ paths:
         "500":
           description: Internal Server Error
           schema: {}
+      security:
+      - ApiKeyAuth: []
       summary: add to blacklist
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"
